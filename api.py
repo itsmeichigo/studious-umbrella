@@ -235,6 +235,14 @@ def new_customer():
 	customer.import_data(request.json)
 	db.session.add(customer)
 	db.session.commit()
+	return jsonify({}), 201, {'Location': customer.get_url()}
+
+@api.route('/customers/<int:id>', methods=['PUT'])
+def edit_customer(id):
+	customer = Customer.query.get_or_404(id)
+	customer.import_data(request.json)
+	db.session.add(customer)
+	db.session.commit()
 	return jsonify({})
 
 @api.route('/products/', methods=['GET'])
