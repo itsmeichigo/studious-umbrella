@@ -85,13 +85,13 @@ class Customer(db.Model):
 	orders = db.relationship('Order', backref='customer', lazy='dynamic')
 
 	def get_url(self):
-		return url_for('get_customer', id=self.id, _external=True)
+		return url_for('api.get_customer', id=self.id, _external=True)
 
 	def export_data(self):
 		return {
 			'self_url': self.get_url(),
 			'name': self.name,
-			'orders': url_for('get_customer_orders', id=self.id, _external=True)
+			'orders': url_for('api.get_customer_orders', id=self.id, _external=True)
 		}
 
 	def import_data(self, data):
@@ -109,7 +109,7 @@ class Product(db.Model):
 	items = db.relationship('Item', backref='product', lazy='dynamic')
 
 	def get_url(self):
-		return url_for('get_product', id=self.id, _external=True)
+		return url_for('api.get_product', id=self.id, _external=True)
 
 	def export_data(self):
 		return {
@@ -134,14 +134,14 @@ class Order(db.Model):
 		cascade='all, delete-orphan')
 
 	def get_url(self):
-		return url_for('get_order', id=self.id, _external=True)
+		return url_for('api.get_order', id=self.id, _external=True)
 
 	def export_data(self):
 		return {
 			'self_url': self.get_url(),
 			'customer_url': self.customer.get_url(),
 			'date': self.date.isoformat() + 'Z',
-			'items_url': url_for('get_order_items', id=self.id, _external=True)
+			'items_url': url_for('api.get_order_items', id=self.id, _external=True)
 		}
 
 	def import_data(self, data):
@@ -160,7 +160,7 @@ class Item(db.Model):
 	quantity = db.Column(db.Integer)
 
 	def get_url(self):
-		return url_for('get_item', id=self.id, _external=True)
+		return url_for('api.get_item', id=self.id, _external=True)
 
 	def export_data(self):
 		return {
