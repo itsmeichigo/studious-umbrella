@@ -91,7 +91,7 @@ class Customer(db.Model):
 		return {
 			'self_url': self.get_url(),
 			'name': self.name,
-			'orders': url_for('api.get_customer_orders', id=self.id, _external=True)
+			'orders_url': url_for('api.get_customer_orders', id=self.id, _external=True)
 		}
 
 	def import_data(self, data):
