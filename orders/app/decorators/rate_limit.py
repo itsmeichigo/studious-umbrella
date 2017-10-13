@@ -24,7 +24,7 @@ class MemRateLimit(object):
         if remaining < 0:
             remaining = 0
             allow = False
-        return all, remaining, self.counters[key]['reset']
+        return allow, remaining, self.counters[key]['reset']
 
     def cleanup(self, now):
         """Eliminate expired keys."""
@@ -44,20 +44,20 @@ def rate_limit(limit, period):
                 if _limiter is None:
                     _limiter = MemRateLimit()
 
-                    key = '{0}/{1}'.format(f.__name__, request.remote_addr)
-                    allowed, remaining, reset = _limiter.is_allowed(key, limit, period)
+                key = '{0}/{1}'.format(f.__name__, request.remote_addr)
+                allowed, remaining, reset = _limiter.is_allowed(key, limit, period)
 
-                    g.headers = {
-                        'X-RateLimit-Remaining': str(remaining),
-                        'X-RateLimit-Limit': str(limit),
-                        'X-RateLimit-Reset': str(reset)
-                    }
+                g.headers = {
+                    'X-RateLimit-Remaining': str(remaining),
+                    'X-RateLimit-Limit': str(limit),
+                    'X-RateLimit-Reset': str(reset)
+                }
 
-                    if not allowed:
-                        response = jsonify({'status': 429, 'error': 'too many requests', 'message': 'You have exceeded your request rate'})
-                        response.status_code = 429
-                        return response
+                if not allowed:
+                    response = jsonify({'status': 429, 'error': 'too many requests', 'message': 'You have exceeded your request rate'})
+                    response.status_code = 429
+                    return response
 
-                    return f(*args, **kwargs)
-                return wrapped
-            return decorator
+                return f(*args, **kwargs)
+            return wrapped
+        return decorator
