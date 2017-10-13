@@ -1,6 +1,7 @@
 import os
 from flask import Flask, jsonify, g
 from flask.ext.sqlalchemy import SQLAlchemy
+from .decorators import no_cache, json
 
 db = SQLAlchemy()
 
@@ -23,7 +24,9 @@ def create_app(config_name):
 	from .auth import auth
 	@app.route('/get-auth-token')
 	@auth.login_required
+	@no_cache
+	@json
 	def get_auth_token():
-		return jsonify({'token': g.user.generate_auth_token()})
+		return {'token': g.user.generate_auth_token()}
 
 	return app
