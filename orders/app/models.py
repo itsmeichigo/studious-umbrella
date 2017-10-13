@@ -86,7 +86,7 @@ class Order(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), index=True)
 	date = db.Column(db.DateTime, default=datetime.now)
-	items = db.relationship('Item', backref='order', lazy='dynamic', 
+	items = db.relationship('Item', backref='order', lazy='dynamic',
 		cascade='all, delete-orphan')
 
 	def get_url(self):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.6
 import coverage
 COV = coverage.coverage(branch=True, include='app/*')
 COV.start()
