@@ -28,11 +28,12 @@ def paginate(collection, max_per_page=25):
             else:
                 pages['next_url'] = None
 
-            pages['first_url'] = url_for(request.endpoint, page=1,
-            per_page=per_page, extended=extended, _external=True, **kwargs)
+            if p.pages.count() > 0:
+                pages['first_url'] = url_for(request.endpoint, page=1,
+                per_page=per_page, extended=extended, _external=True, **kwargs)
 
-            pages['last_url'] = url_for(request.endpoint, page=p.pages,
-            per_page=per_page, extended=extended, _external=True, **kwargs)
+                pages['last_url'] = url_for(request.endpoint, page=p.pages,
+                per_page=per_page, extended=extended, _external=True, **kwargs)
 
             # return a dictionary as a response
             if extended == 1:
